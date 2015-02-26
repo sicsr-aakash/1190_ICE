@@ -339,6 +339,7 @@ int drawable abc_textfield_search_material 0x7f020032
 int drawable ic_launcher 0x7f020033
 int id ContactName1 0x7f080049
 int id ContactName2 0x7f08004c
+int id SMSTV 0x7f08004d
 int id action_bar 0x7f080031
 int id action_bar_activity_content 0x7f080000
 int id action_bar_container 0x7f080030
@@ -352,7 +353,7 @@ int id action_menu_presenter 0x7f080003
 int id action_mode_bar 0x7f08002e
 int id action_mode_bar_stub 0x7f08002d
 int id action_mode_close_button 0x7f080020
-int id action_settings 0x7f08004e
+int id action_settings 0x7f080055
 int id activity_chooser_view_content 0x7f080021
 int id always 0x7f080016
 int id beginning 0x7f080013
@@ -385,7 +386,8 @@ int id normal 0x7f08000a
 int id progress_circular 0x7f080005
 int id progress_horizontal 0x7f080006
 int id radio 0x7f08002b
-int id saveButton 0x7f08004d
+int id recordAudiocheckBox 0x7f080050
+int id saveButton 0x7f080054
 int id scrollView 0x7f080043
 int id search_badge 0x7f080035
 int id search_bar 0x7f080034
@@ -397,11 +399,14 @@ int id search_mag_icon 0x7f080038
 int id search_plate 0x7f080039
 int id search_src_text 0x7f08003a
 int id search_voice_btn 0x7f08003e
+int id sendSMScheckBox 0x7f08004f
+int id serviceStatus 0x7f080053
 int id settingsButton 0x7f080042
 int id shortcut 0x7f08002a
 int id showCustom 0x7f08000f
 int id showHome 0x7f080010
 int id showTitle 0x7f080011
+int id smsBox 0x7f08004e
 int id split_action_bar 0x7f080007
 int id submit_area 0x7f08003c
 int id tabMode 0x7f08000b
@@ -409,7 +414,9 @@ int id textView 0x7f08003f
 int id textView2 0x7f08004a
 int id textView3 0x7f080045
 int id textView4 0x7f080047
+int id textView5 0x7f080051
 int id title 0x7f080027
+int id toggleServiceButton 0x7f080052
 int id up 0x7f080008
 int id useLogo 0x7f080012
 int id voice_button 0x7f080040

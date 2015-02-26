@@ -11,6 +11,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,17 +23,26 @@ import android.widget.Toast;
 public class Settings extends Activity {
 
     private EditText localEmergency;
+    private EditText smsbox;
+    private CheckBox recordAudio;
+    private CheckBox sendSMScheckBox;
     private TextView contactName1;
     private TextView contactName2;
+    private TextView serviceStatus;
     private Button contactPicker1;
     private Button contactPicker2;
+    private Button serviceToggle;
     private Button saveButton;
 
-    private String LocalEmergency;
-    private String ContactName1;
-    private String ContactName2;
-    private String contactNumber1;
-    private String contactNumber2;
+    private Boolean recordAudioBoolean = true;
+    private Boolean sendSMSBoolean = true;
+    private String LocalEmergency="100";
+    private String smsContent="I Need help urgently. This is an automated message.";
+    private String ContactName1="Not Selected";
+    private String ContactName2="Not Selected";
+    private String contactNumber1="";
+    private String contactNumber2="";
+    private String servicestatus="Stopped";
 
     private String one;
     private String name;
@@ -46,11 +57,31 @@ public class Settings extends Activity {
 
         //locate and fix assets
         localEmergency = (EditText) findViewById(R.id.localEmergencyNumber);
+        smsbox = (EditText) findViewById(R.id.smsBox);
+        recordAudio = (CheckBox) findViewById(R.id.recordAudiocheckBox);
+        sendSMScheckBox = (CheckBox) findViewById(R.id.sendSMScheckBox);
         contactName1 = (TextView) findViewById(R.id.ContactName1);
         contactName2 = (TextView) findViewById(R.id.ContactName2);
+        serviceStatus = (TextView) findViewById(R.id.serviceStatus);
         contactPicker1 = (Button) findViewById(R.id.contactPicker1);
         contactPicker2 = (Button) findViewById(R.id.contactPicker2);
+        serviceToggle = (Button) findViewById(R.id.toggleServiceButton);
         saveButton = (Button) findViewById(R.id.saveButton);
+    }
+
+    public void writeToPref(){
+
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString("localEmergency", LocalEmergency);
+        editor.putString("contactName1", ContactName1);
+        editor.putString("contactName2", ContactName2);
+        editor.putString("contactNumber1", contactNumber1);
+        editor.putString("contactNumber2", contactNumber2);
+        editor.putString("smsContent", smsContent);
+        editor.putString("serviceStatus", servicestatus);
+        editor.putString("recordAudioBoolean", Boolean.toString(recordAudioBoolean));
+        editor.putString("sendSMSBoolean", Boolean.toString(sendSMSBoolean));
+        editor.commit();
     }
 
     protected void loadPref(){
@@ -76,17 +107,21 @@ public class Settings extends Activity {
             this.contactNumber2 = sharedpreferences.getString("contactNumber2","");
         }
 
-    }
+        if(sharedpreferences.contains("smsContent")){
+            this.smsContent = sharedpreferences.getString("smsContent","I Need help urgently. This is an automated message.");
+        }
 
-    public void writeToPref(){
+        if(sharedpreferences.contains("serviceStatus")){
+            this.servicestatus = sharedpreferences.getString("serviceStatus","Stopped");
+        }
 
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putString("localEmergency", LocalEmergency);
-        editor.putString("contactName1", ContactName1);
-        editor.putString("contactName2", ContactName2);
-        editor.putString("contactNumber1", contactNumber1);
-        editor.putString("contactNumber2", contactNumber2);
-        editor.commit();
+        if(sharedpreferences.contains("recordAudioBoolean")){
+            this.recordAudioBoolean = Boolean.parseBoolean(sharedpreferences.getString("recordAudioBoolean","true"));
+        }
+
+        if(sharedpreferences.contains("sendSMSBoolean")){
+            this.sendSMSBoolean = Boolean.parseBoolean(sharedpreferences.getString("sendSMSBoolean","true"));
+        }
 
     }
 
@@ -105,6 +140,22 @@ public class Settings extends Activity {
         if (!ContactName2.equals("")){
 
             contactName2.setText(ContactName2);
+        }
+
+        if(!smsContent.equals("")){
+            smsbox.setText(smsContent);
+        }
+
+        if(!servicestatus.equals("")){
+            serviceStatus.setText(servicestatus);
+        }
+
+        if(!recordAudioBoolean.equals("")){
+            recordAudio.setChecked(recordAudioBoolean);
+        }
+
+        if(!sendSMSBoolean.equals("")){
+            sendSMScheckBox.setChecked(sendSMSBoolean);
         }
 
     }
@@ -133,6 +184,65 @@ public class Settings extends Activity {
             @Override
             public void afterTextChanged(Editable s) {
                 LocalEmergency = localEmergency.getText().toString();
+            }
+        });
+
+        smsbox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                smsContent = smsbox.getText().toString();
+            }
+        });
+
+        serviceToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //start the service and then set the variable
+                if(servicestatus.equals("Stopped")){
+                    startService();
+                    servicestatus = "Running";
+                }else{
+                    stopService();
+                    servicestatus = "Stopped";
+                }
+                //refresh the UI components to update the status
+                loadDatatoView();
+            }
+        });
+
+        recordAudio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    recordAudioBoolean = true;
+                    Toast.makeText(getApplicationContext(),"App will record audio when listening \"help\". Please click 'save' button", Toast.LENGTH_LONG).show();
+                }else{
+                    recordAudioBoolean = false;
+                    Toast.makeText(getApplicationContext(),"App will NOT record audio when listening \"help\".  Please click 'save' button", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        sendSMScheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    sendSMSBoolean = true;
+                    Toast.makeText(getApplicationContext(),"App will send SMS when listening \"help\". Please click 'save' button", Toast.LENGTH_LONG).show();
+                }else{
+                    sendSMSBoolean = false;
+                    Toast.makeText(getApplicationContext(),"App will NOT send SMS when listening \"help\".  Please click 'save' button", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -218,5 +328,14 @@ public class Settings extends Activity {
         }  //while (cursor.moveToNext())
         cursor.close();
     }//getContactInfo
+
+    public void startService() {
+        startService(new Intent(getBaseContext(), EmergencyListenerService.class));
+    }
+
+    // Method to stop the service
+    public void stopService() {
+        stopService(new Intent(getBaseContext(), EmergencyListenerService.class));
+    }
 
 }//class over

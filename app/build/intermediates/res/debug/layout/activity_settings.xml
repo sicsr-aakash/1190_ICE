@@ -16,14 +16,19 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="0dp"
-        android:fillViewport="false">
+        android:fillViewport="false"
+        android:layout_margin="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginBottom="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/linear1"
             android:layout_marginTop="0dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:baselineAligned="false">
 
 
             <TextView
@@ -120,14 +125,90 @@
 
             </LinearLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="SMS content :"
+                android:id="@+id/SMSTV"
+                android:textColor="@color/black"
+                android:layout_marginTop="20dp"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:ems="10"
+                android:id="@+id/smsBox"
+                android:layout_gravity="center_horizontal"
+                android:text="I Need help urgently. This is an automated message."
+                android:textColor="@color/black"/>
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Send SMS on &quot;help&quot;"
+                android:id="@+id/sendSMScheckBox"
+                android:layout_gravity="left"
+                android:checked="true"
+                android:textColor="@color/black"
+                android:layout_marginTop="20dp" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Record Audio on &quot;help&quot;"
+                android:id="@+id/recordAudiocheckBox"
+                android:layout_gravity="left"
+                android:checked="true"
+                android:textColor="@color/black"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Service Status :"
+                android:id="@+id/textView5"
+                android:textColor="@color/black"
+                android:layout_marginTop="20dp"/>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="1"
+                android:layout_gravity="center_horizontal">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Start/Stop"
+                    android:id="@+id/toggleServiceButton"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="left"
+                    android:layout_weight="0.20" />
+
+                <TextView
+                    android:layout_width="188dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="24dp"
+                    android:textColor="@color/black"
+                    android:text="Stopped"
+                    android:id="@+id/serviceStatus"
+                    android:layout_gravity="right"
+                    android:gravity="right"
+                    android:layout_weight="0.40" />
+            </LinearLayout>
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Save"
                 android:id="@+id/saveButton"
+                android:layout_gravity="center_horizontal"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:layout_gravity="center_horizontal" />
+                android:layout_marginTop="20dp"/>
 
 
         </LinearLayout>

@@ -2,6 +2,13 @@
 <items version="2" >
 
     <item
+        jar="/Users/siddharthbhatt/Android Dev/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.2/support-annotations-21.0.2.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="99373741f99a0556ee293c41e8faa1ca3ae8a4e6">
+        <dex dex="/Users/siddharthbhatt/AndroidStudioProjects/Voice_Recog/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.2-9f968de76f4a1f267bfd649f909d733ed5654580.jar" />
+    </item>
+    <item
         jar="/Users/siddharthbhatt/AndroidStudioProjects/Voice_Recog/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.2/libs/internal_impl-21.0.2.jar"
         jumboMode="false"
         revision="21.1.1"
@@ -21,13 +28,6 @@
         revision="21.1.1"
         sha1="7ae2d38807a43b2f2185ff4089a92c790b579e54">
         <dex dex="/Users/siddharthbhatt/AndroidStudioProjects/Voice_Recog/app/build/intermediates/pre-dexed/debug/classes-abc6e1573f572ee17ede885f2e3921ababc86cbd.jar" />
-    </item>
-    <item
-        jar="/Users/siddharthbhatt/Android Dev/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.2/support-annotations-21.0.2.jar"
-        jumboMode="false"
-        revision="21.1.1"
-        sha1="99373741f99a0556ee293c41e8faa1ca3ae8a4e6">
-        <dex dex="/Users/siddharthbhatt/AndroidStudioProjects/Voice_Recog/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.2-9f968de76f4a1f267bfd649f909d733ed5654580.jar" />
     </item>
 
 </items>

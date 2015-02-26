@@ -7,9 +7,15 @@
     <uses-sdk
         android:minSdkVersion="19"
         android:targetSdkVersion="21" />
+
     <!-- Permissions go here -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.LOCATION_HARDWARE" />
 
     <application
         android:allowBackup="true"
@@ -33,6 +39,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.siddharthbhatt.voice_recog.MainActivity" />
         </activity>
+
+        <service
+            android:name="com.siddharthbhatt.voice_recog.EmergencyListenerService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
 </manifest>
