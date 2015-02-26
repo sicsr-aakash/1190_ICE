@@ -15,82 +15,122 @@
         android:id="@+id/scrollView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="0dp" >
+        android:layout_marginTop="0dp"
+        android:fillViewport="false">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/relative2"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="0dp">
+            android:layout_height="wrap_content"
+            android:id="@+id/linear1"
+            android:layout_marginTop="0dp"
+            android:orientation="vertical">
+
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Emergency Numbers :"
-                android:id="@+id/textview1"
-                android:textColor="@color/black"
-                android:textSize="@dimen/abc_text_size_medium_material"/>
-
+                android:text="Local Emergency Number :"
+                android:id="@+id/textView3"
+                android:textColor="@color/black"/>
 
             <EditText
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="phone"
                 android:ems="10"
-                android:id="@+id/number1"
-                android:layout_alignTop="@+id/textview1"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="45dp"
+                android:id="@+id/localEmergencyNumber"
                 android:hint="100"
-                android:maxLength="10"/>
+                android:maxLength="10"
+                android:gravity="left"
+                android:layout_marginTop="10dp"/>
 
-            <EditText
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="phone"
-                android:ems="10"
-                android:id="@+id/number2"
-                android:layout_marginTop="45dp"
-                android:hint="98********"
-                android:layout_alignTop="@+id/number1"
-                android:layout_centerHorizontal="true"
-                android:maxLength="10"/>
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Emergency Contact 1 :"
+                android:id="@+id/textView4"
+                android:textColor="@color/black"
+                android:layout_marginTop="20dp"/>
 
-            <EditText
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="1">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pick Contact"
+                    android:id="@+id/contactPicker1"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="left"
+                    android:layout_weight="0.20"/>
+
+                <TextView
+                    android:layout_width="188dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="24dp"
+                    android:textColor="@color/black"
+                    android:text="Not Selected"
+                    android:id="@+id/ContactName1"
+                    android:layout_gravity="right"
+                    android:gravity="right"
+                    android:layout_weight="0.40" />
+
+            </LinearLayout>
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="phone"
-                android:ems="10"
-                android:id="@+id/number3"
-                android:hint="94********"
-                android:layout_below="@+id/number2"
-                android:layout_alignStart="@+id/number2"
-                android:layout_marginTop="10dp"
-                android:maxLength="10"/>
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Emergency Contact 2 :"
+                android:textColor="@color/black"
+                android:id="@+id/textView2"
+                android:layout_marginTop="20dp" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="1">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pick Contact"
+                    android:id="@+id/contactPicker2"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="left"
+                    android:layout_weight="0.20"/>
+
+                <TextView
+                    android:layout_width="188dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="24dp"
+                    android:textColor="@color/black"
+                    android:text="Not Selected"
+                    android:id="@+id/ContactName2"
+                    android:layout_gravity="right"
+                    android:gravity="right"
+                    android:layout_weight="0.40" />
+
+            </LinearLayout>
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Save"
                 android:id="@+id/saveButton"
-                android:layout_alignTop="@+id/scrollView"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="203dp" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pick Contact"
-                android:id="@+id/contactPicker"
-                android:layout_marginTop="310dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true" />
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center_horizontal" />
 
 
-        </RelativeLayout>
+        </LinearLayout>
     </ScrollView>
 
 </RelativeLayout>
