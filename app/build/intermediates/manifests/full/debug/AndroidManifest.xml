@@ -41,7 +41,7 @@
         </activity>
 
         <service
-            android:name="com.siddharthbhatt.voice_recog.EmergencyListenerService"
+            android:name="com.siddharthbhatt.voice_recog.MyService"
             android:enabled="true"
             android:exported="true" >
         </service>

@@ -4,20 +4,30 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.provider.ContactsContract;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Settings extends Activity {
@@ -29,9 +39,11 @@ public class Settings extends Activity {
     private TextView contactName1;
     private TextView contactName2;
     private TextView serviceStatus;
+    private TextView helpWordTextView;
     private Button contactPicker1;
     private Button contactPicker2;
     private Button serviceToggle;
+    private Button helpWordButton;
     private Button saveButton;
 
     private Boolean recordAudioBoolean = true;
@@ -43,6 +55,7 @@ public class Settings extends Activity {
     private String contactNumber1="";
     private String contactNumber2="";
     private String servicestatus="Stopped";
+    private String helpWord="help";
 
     private String one;
     private String name;
@@ -51,6 +64,18 @@ public class Settings extends Activity {
     private static final String MyPREFERENCES = "MyPrefs" ;
     public static final int PICK_CONTACT = 1;
     SharedPreferences sharedpreferences;
+
+    //voice recognition and general variables
+    //variable for checking Voice Recognition support on user device
+    private static final int VR_REQUEST = 999;
+    //ListView for displaying suggested words
+    private ListView wordList;
+
+    //TTS variables
+    //variable for checking TTS engine data on user device
+    private int MY_DATA_CHECK_CODE = 0;
+    //Text To Speech instance
+    private TextToSpeech repeatTTS;
 
 
     protected void setAssests(){
@@ -63,9 +88,11 @@ public class Settings extends Activity {
         contactName1 = (TextView) findViewById(R.id.ContactName1);
         contactName2 = (TextView) findViewById(R.id.ContactName2);
         serviceStatus = (TextView) findViewById(R.id.serviceStatus);
+        helpWordTextView = (TextView) findViewById(R.id.HelpWordTextView);
         contactPicker1 = (Button) findViewById(R.id.contactPicker1);
         contactPicker2 = (Button) findViewById(R.id.contactPicker2);
         serviceToggle = (Button) findViewById(R.id.toggleServiceButton);
+        helpWordButton = (Button) findViewById(R.id.setHelpWordButton);
         saveButton = (Button) findViewById(R.id.saveButton);
     }
 
@@ -81,6 +108,7 @@ public class Settings extends Activity {
         editor.putString("serviceStatus", servicestatus);
         editor.putString("recordAudioBoolean", Boolean.toString(recordAudioBoolean));
         editor.putString("sendSMSBoolean", Boolean.toString(sendSMSBoolean));
+        editor.putString("helpWord", helpWord);
         editor.commit();
     }
 
@@ -123,6 +151,10 @@ public class Settings extends Activity {
             this.sendSMSBoolean = Boolean.parseBoolean(sharedpreferences.getString("sendSMSBoolean","true"));
         }
 
+        if(sharedpreferences.contains("helpWord")){
+            this.helpWord = sharedpreferences.getString("helpWord","help");
+        }
+
     }
 
     protected void loadDatatoView(){
@@ -158,6 +190,10 @@ public class Settings extends Activity {
             sendSMScheckBox.setChecked(sendSMSBoolean);
         }
 
+        if(!helpWord.equals("")){
+            helpWordTextView.setText(helpWord);
+        }
+
     }
 
 
@@ -169,6 +205,26 @@ public class Settings extends Activity {
         setAssests();
         loadPref();
         loadDatatoView();
+
+        //find out whether speech recognition is supported
+        PackageManager packManager = getPackageManager();
+        List<ResolveInfo> intActivities = packManager.queryIntentActivities(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
+        if (intActivities.size() != 0) {
+            //speech recognition is supported - detect user button clicks
+            helpWordButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //listen for results
+                    listenToSpeech();
+                }
+            });
+        }
+        else
+        {
+            //speech recognition not supported, disable button and output message
+            helpWordButton.setEnabled(false);
+            Toast.makeText(this, "Oops - Speech recognition not supported!", Toast.LENGTH_LONG).show();
+        }
 
         localEmergency.addTextChangedListener(new TextWatcher() {
             @Override
@@ -275,7 +331,7 @@ public class Settings extends Activity {
             public void onClick(View v) {
 
                 writeToPref();
-                Toast.makeText(getApplicationContext(), getString(R.string.Saved), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.Saved), Toast.LENGTH_SHORT).show();
                 loadDatatoView();
                 finish();
             }
@@ -306,6 +362,17 @@ public class Settings extends Activity {
             Toast.makeText(getApplicationContext(),a, Toast.LENGTH_LONG).show();
         }
 
+        //check speech recognition result
+        if (reqCode == VR_REQUEST && resultCode == RESULT_OK)
+        {
+            //store the returned word list as an ArrayList
+            ArrayList<String> suggestedWords = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            //set the retrieved list to display in the ListView using an ArrayAdapter
+            //wordList.setAdapter(new ArrayAdapter<String>(this, R.layout.word, suggestedWords));
+            //call the function to process words
+            process(suggestedWords);
+        }
+
 
     }//onActivityResult over
 
@@ -330,12 +397,35 @@ public class Settings extends Activity {
     }//getContactInfo
 
     public void startService() {
-        startService(new Intent(getBaseContext(), EmergencyListenerService.class));
+        startService(new Intent(getBaseContext(), MyService.class));
     }
 
     // Method to stop the service
     public void stopService() {
-        stopService(new Intent(getBaseContext(), EmergencyListenerService.class));
+        stopService(new Intent(getBaseContext(), MyService.class));
     }
 
-}//class over
+    private void listenToSpeech() {
+
+        //start the speech recognition intent passing required data
+        Intent listenIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        //indicate package
+        listenIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getClass().getPackage().getName());
+        //message to display while listening
+        listenIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say a word!");
+        //set speech model
+        listenIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        //specify number of results to retrieve
+        listenIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 10);
+
+        //start listening
+        startActivityForResult(listenIntent, VR_REQUEST);
+    }//listenToSpeech() over
+
+    public void process(ArrayList suggestedWords){
+        this.helpWord = suggestedWords.get(0).toString();
+        Toast.makeText(getApplicationContext(),"Help Phrase : "+helpWord, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),"Please click 'save' button", Toast.LENGTH_LONG).show();
+    }//process() over
+
+}//class ove

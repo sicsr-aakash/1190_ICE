@@ -1307,6 +1307,7 @@ containing a value of this type.
     public static final class id {
         public static final int ContactName1=0x7f080049;
         public static final int ContactName2=0x7f08004c;
+        public static final int HelpWordTextView=0x7f080051;
         public static final int SMSTV=0x7f08004d;
         public static final int action_bar=0x7f080031;
         public static final int action_bar_activity_content=0x7f080000;
@@ -1321,7 +1322,7 @@ containing a value of this type.
         public static final int action_mode_bar=0x7f08002e;
         public static final int action_mode_bar_stub=0x7f08002d;
         public static final int action_mode_close_button=0x7f080020;
-        public static final int action_settings=0x7f080055;
+        public static final int action_settings=0x7f080058;
         public static final int activity_chooser_view_content=0x7f080021;
         public static final int always=0x7f080016;
         public static final int beginning=0x7f080013;
@@ -1354,8 +1355,8 @@ containing a value of this type.
         public static final int progress_circular=0x7f080005;
         public static final int progress_horizontal=0x7f080006;
         public static final int radio=0x7f08002b;
-        public static final int recordAudiocheckBox=0x7f080050;
-        public static final int saveButton=0x7f080054;
+        public static final int recordAudiocheckBox=0x7f080053;
+        public static final int saveButton=0x7f080057;
         public static final int scrollView=0x7f080043;
         public static final int search_badge=0x7f080035;
         public static final int search_bar=0x7f080034;
@@ -1367,8 +1368,9 @@ containing a value of this type.
         public static final int search_plate=0x7f080039;
         public static final int search_src_text=0x7f08003a;
         public static final int search_voice_btn=0x7f08003e;
-        public static final int sendSMScheckBox=0x7f08004f;
-        public static final int serviceStatus=0x7f080053;
+        public static final int sendSMScheckBox=0x7f080052;
+        public static final int serviceStatus=0x7f080056;
+        public static final int setHelpWordButton=0x7f080050;
         public static final int settingsButton=0x7f080042;
         public static final int shortcut=0x7f08002a;
         public static final int showCustom=0x7f08000f;
@@ -1382,9 +1384,10 @@ containing a value of this type.
         public static final int textView2=0x7f08004a;
         public static final int textView3=0x7f080045;
         public static final int textView4=0x7f080047;
-        public static final int textView5=0x7f080051;
+        public static final int textView5=0x7f080054;
+        public static final int textView6=0x7f08004f;
         public static final int title=0x7f080027;
-        public static final int toggleServiceButton=0x7f080052;
+        public static final int toggleServiceButton=0x7f080055;
         public static final int up=0x7f080008;
         public static final int useLogo=0x7f080012;
         public static final int voice_button=0x7f080040;

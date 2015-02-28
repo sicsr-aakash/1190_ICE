@@ -174,7 +174,7 @@ public class MainActivity extends ActionBarActivity{
 
             if(suggestedWords.get(i).toString().contains("hello")) {
                 Toast.makeText(this, "Hello to you too !", Toast.LENGTH_LONG).show();
-            }else if(suggestedWords.get(i).toString().contains("help")){
+            }else if(suggestedWords.get(i).toString().contains(sharedpreferences.getString("helpWord","help"))){
 
                 makeCall();
 
@@ -206,7 +206,7 @@ public class MainActivity extends ActionBarActivity{
         phoneIntent.setData(Uri.parse(no));
         try {
             startActivity(phoneIntent);
-            finish();
+            //finish();
             Log.i("Finished making a call.", "");
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(MainActivity.this,

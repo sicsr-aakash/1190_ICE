@@ -84,7 +84,7 @@ ADDED from AndroidManifest.xml:32:13
 		ADDED from AndroidManifest.xml:33:17
 	android:value
 		ADDED from AndroidManifest.xml:34:17
-service#com.siddharthbhatt.voice_recog.EmergencyListenerService
+service#com.siddharthbhatt.voice_recog.MyService
 ADDED from AndroidManifest.xml:37:9
 	android:exported
 		ADDED from AndroidManifest.xml:40:13
