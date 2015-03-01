@@ -36,6 +36,7 @@ public class Settings extends Activity {
     private EditText smsbox;
     private CheckBox recordAudio;
     private CheckBox sendSMScheckBox;
+    private CheckBox locationCheckbox;
     private TextView contactName1;
     private TextView contactName2;
     private TextView serviceStatus;
@@ -48,6 +49,7 @@ public class Settings extends Activity {
 
     private Boolean recordAudioBoolean = true;
     private Boolean sendSMSBoolean = true;
+    private Boolean sendLocation = true;
     private String LocalEmergency="100";
     private String smsContent="I Need help urgently. This is an automated message.";
     private String ContactName1="Not Selected";
@@ -85,6 +87,7 @@ public class Settings extends Activity {
         smsbox = (EditText) findViewById(R.id.smsBox);
         recordAudio = (CheckBox) findViewById(R.id.recordAudiocheckBox);
         sendSMScheckBox = (CheckBox) findViewById(R.id.sendSMScheckBox);
+        locationCheckbox = (CheckBox) findViewById(R.id.locationCheckbox);
         contactName1 = (TextView) findViewById(R.id.ContactName1);
         contactName2 = (TextView) findViewById(R.id.ContactName2);
         serviceStatus = (TextView) findViewById(R.id.serviceStatus);
@@ -108,6 +111,7 @@ public class Settings extends Activity {
         editor.putString("serviceStatus", servicestatus);
         editor.putString("recordAudioBoolean", Boolean.toString(recordAudioBoolean));
         editor.putString("sendSMSBoolean", Boolean.toString(sendSMSBoolean));
+        editor.putString("sendLocation", Boolean.toString(sendLocation));
         editor.putString("helpWord", helpWord);
         editor.commit();
     }
@@ -151,6 +155,10 @@ public class Settings extends Activity {
             this.sendSMSBoolean = Boolean.parseBoolean(sharedpreferences.getString("sendSMSBoolean","true"));
         }
 
+        if(sharedpreferences.contains("sendLocation")){
+            this.sendLocation = Boolean.parseBoolean(sharedpreferences.getString("sendLocation","true"));
+        }
+
         if(sharedpreferences.contains("helpWord")){
             this.helpWord = sharedpreferences.getString("helpWord","help");
         }
@@ -188,6 +196,10 @@ public class Settings extends Activity {
 
         if(!sendSMSBoolean.equals("")){
             sendSMScheckBox.setChecked(sendSMSBoolean);
+        }
+
+        if(!sendLocation.equals("")){
+            locationCheckbox.setChecked(sendLocation);
         }
 
         if(!helpWord.equals("")){
@@ -264,10 +276,10 @@ public class Settings extends Activity {
             @Override
             public void onClick(View v) {
                 //start the service and then set the variable
-                if(servicestatus.equals("Stopped")){
+                if (servicestatus.equals("Stopped")) {
                     startService();
                     servicestatus = "Running";
-                }else{
+                } else {
                     stopService();
                     servicestatus = "Stopped";
                 }
@@ -279,12 +291,12 @@ public class Settings extends Activity {
         recordAudio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
+                if (isChecked) {
                     recordAudioBoolean = true;
-                    Toast.makeText(getApplicationContext(),"App will record audio when listening \"help\". Please click 'save' button", Toast.LENGTH_LONG).show();
-                }else{
+                    Toast.makeText(getApplicationContext(), "App will record audio when listening \"help\". Please click 'save' button", Toast.LENGTH_LONG).show();
+                } else {
                     recordAudioBoolean = false;
-                    Toast.makeText(getApplicationContext(),"App will NOT record audio when listening \"help\".  Please click 'save' button", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "App will NOT record audio when listening \"help\".  Please click 'save' button", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -302,6 +314,18 @@ public class Settings extends Activity {
             }
         });
 
+        locationCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    sendLocation = true;
+                    Toast.makeText(getApplicationContext(),"App will send append location in SMS. Please click 'save' button", Toast.LENGTH_LONG).show();
+                }else{
+                    sendLocation = false;
+                    Toast.makeText(getApplicationContext(),"App will NOT send append location in SMS.  Please click 'save' button", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
         contactPicker1.setOnClickListener(new View.OnClickListener() {
             @Override

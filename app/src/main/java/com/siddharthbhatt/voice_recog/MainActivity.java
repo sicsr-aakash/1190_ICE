@@ -3,6 +3,7 @@ package com.siddharthbhatt.voice_recog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.media.MediaRecorder;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -32,8 +33,17 @@ import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.location.LocationClient;
 
-public class MainActivity extends ActionBarActivity{
+
+public class MainActivity extends ActionBarActivity implements
+        GooglePlayServicesClient.ConnectionCallbacks,
+        GooglePlayServicesClient.OnConnectionFailedListener{
+
+
+    LocationClient mLocationClient;
     //voice recognition and general variables
 
     //variable for checking Voice Recognition support on user device
@@ -62,11 +72,9 @@ public class MainActivity extends ActionBarActivity{
     //On-Screen Assests
     private Button settingButton;
     private Button voice_button;
-    private TextView textView;
+    private Button aboutButton;
+    private Button insButton;
 
-    /**
-     * Instruct the app to listen for user speech input
-     */
     private void listenToSpeech() {
 
         //start the speech recognition intent passing required data
@@ -91,14 +99,12 @@ public class MainActivity extends ActionBarActivity{
         if(Boolean.parseBoolean(sharedpreferences.getString("recordAudioBoolean","true"))) {
             stopAudioRecording();
         }
+        if(Boolean.parseBoolean(sharedpreferences.getString("sendLocation","true"))) {
+            disconnectToLocationService();
+        }
 
     }
 
-    /**
-     * onActivityResults handles:
-     *  - retrieving results of speech recognition listening
-     *  - retrieving result of TTS data check
-     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //check speech recognition result
@@ -123,10 +129,10 @@ public class MainActivity extends ActionBarActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        insButton = (Button) findViewById(R.id.insButton);
+        aboutButton = (Button) findViewById(R.id.aboutButton);
         settingButton = (Button) findViewById(R.id.settingsButton);
-        textView = (TextView) findViewById(R.id.textView);
         voice_button = (Button) findViewById(R.id.voice_button);
-        wordList = (ListView) findViewById(R.id.word_list);
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
         outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/emergency.3gp";
@@ -135,6 +141,27 @@ public class MainActivity extends ActionBarActivity{
         myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
         myAudioRecorder.setOutputFile(outputFile);
+
+        insButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Instructions.class);
+                startActivity(intent);
+            }
+        });
+
+        aboutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), About.class);
+                startActivity(intent);
+            }
+        });
+
+        mLocationClient = new LocationClient(this, this, this);
+        if(Boolean.parseBoolean(sharedpreferences.getString("sendLocation","true"))) {
+            connectToLocationService();
+        }
 
         settingButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,6 +207,9 @@ public class MainActivity extends ActionBarActivity{
 
                 //send SMS if it is enabled
                 if(Boolean.parseBoolean(sharedpreferences.getString("sendSMSBoolean","true"))) {
+                    if(Boolean.parseBoolean(sharedpreferences.getString("sendLocation","true"))) {
+                        setSMSContent();
+                    }
                     sendSMSMessage();
                 }
 
@@ -197,6 +227,52 @@ public class MainActivity extends ActionBarActivity{
         }
 
     }//method over
+
+    private void setSMSContent() {
+        String a = sharedpreferences.getString("smsContent","I Need help urgently. This is an automated message.");
+        a = a + getCurrentLocation();
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString("smsContent", a);
+        editor.commit();
+    }
+
+    private void connectToLocationService(){
+        mLocationClient.connect();
+    }
+
+    private void disconnectToLocationService(){
+        mLocationClient.disconnect();
+    }
+
+    @Override
+    public void onConnected(Bundle dataBundle) {
+        // Display the connection status
+        Toast.makeText(this, "Location Service Connected", Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    public void onDisconnected() {
+        // Display the connection status
+        Toast.makeText(this, "Location Service Disconnected. Please re-connect.",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        // Display the error code on failure
+        Toast.makeText(this, "Location Service Connection Failure : " +
+                        connectionResult.getErrorCode(),
+                Toast.LENGTH_SHORT).show();
+    }
+
+    public String getCurrentLocation() {
+        // Get the current location's latitude & longitude
+        Location currentLocation = mLocationClient.getLastLocation();
+        String msg = "Current Location: " +
+                Double.toString(currentLocation.getLatitude()) + "," +
+                Double.toString(currentLocation.getLongitude());
+
+       return msg;
+    }
 
     protected void makeCall() {
         Log.i("Make call", "");
