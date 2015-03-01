@@ -1,0 +1,6 @@
+/Users/siddharthbhatt/AndroidStudioProjects/Voice_Recog/app/build/intermediates/classes/release
+/Users/siddharthbhatt/AndroidStudioProjects/Voice_Recog/app/build/intermediates/pre-dexed/release/support-annotations-21.0.2-9f968de76f4a1f267bfd649f909d733ed5654580.jar
+/Users/siddharthbhatt/AndroidStudioProjects/Voice_Recog/app/build/intermediates/pre-dexed/release/internal_impl-21.0.2-38ce623429d3416389ccd4304b8d66cf7a4af187.jar
+/Users/siddharthbhatt/AndroidStudioProjects/Voice_Recog/app/build/intermediates/pre-dexed/release/classes-abc6e1573f572ee17ede885f2e3921ababc86cbd.jar
+/Users/siddharthbhatt/AndroidStudioProjects/Voice_Recog/app/build/intermediates/pre-dexed/release/classes-604953834c86ec3409edf89c20fc5adb642596b1.jar
+/Users/siddharthbhatt/AndroidStudioProjects/Voice_Recog/app/build/intermediates/pre-dexed/release/classes-b0d2254474e5fbc9b70cee4317a287b6085b4495.jar
